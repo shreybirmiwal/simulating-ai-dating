@@ -62,10 +62,11 @@ function App() {
                         <div className="absolute top-4 left-4 right-4">
                             {firstProfile && (
                                 <div className="bg-white p-6 rounded-3xl shadow-xl mb-4">
-                                    <h2 className="text-2xl font-bold text-purple-600">{firstProfile.Name}</h2>
-                                    <p className="text-gray-600">🎂 {firstProfile.Age}</p>
-                                    <p className="text-gray-600">❤️ {firstProfile.InterestedIn}</p>
-                                    <p className="text-gray-600">📍 {firstProfile.Location}</p>
+                                    <h2 className="text-2xl font-bold text-teal-600">{firstProfile.Name}</h2>
+                                    <p className="text-gray-600">🎂 {firstProfile.Age}, 📍 {firstProfile.Location}</p>
+                                    <p className="text-gray-600">🧑 {firstProfile.Gender}, ❤️ {firstProfile.InterestedIn}</p>
+                                    <p className="text-gray-600"> Matched with {firstProfile.matches.length} other people!</p>
+                                    <a className="text-blue-600" href={firstProfile.ProfileLink}> Dating Doc</a>
                                 </div>
                             )}
                         </div>
@@ -84,9 +85,10 @@ function App() {
                             {secondProfile && (
                                 <div className="bg-white p-6 rounded-3xl shadow-xl mb-4">
                                     <h2 className="text-2xl font-bold text-teal-600">{secondProfile.Name}</h2>
-                                    <p className="text-gray-600">🎂 {secondProfile.Age}</p>
-                                    <p className="text-gray-600">❤️ {secondProfile.InterestedIn}</p>
-                                    <p className="text-gray-600">📍 {secondProfile.Location}</p>
+                                    <p className="text-gray-600">🎂 {secondProfile.Age}, 📍 {secondProfile.Location}</p>
+                                    <p className="text-gray-600">🧑 {secondProfile.Gender}, ❤️ {secondProfile.InterestedIn}</p>
+                                    <p className="text-gray-600"> Matched with {secondProfile.matches.length} other people!</p>
+                                    <a className="text-blue-600" href={secondProfile.ProfileLink}> Dating Doc</a>
                                 </div>
                             )}
                         </div>
