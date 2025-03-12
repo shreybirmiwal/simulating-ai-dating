@@ -80,7 +80,7 @@ function App() {
 
                     {/* Right Side */}
                     <div className="w-1/2 relative h-full">
-                        <div className="absolute top-4 right-4 left-4">
+                        <div className="absolute top-4 right-4 left-4 z-20">
                             {secondProfile && (
                                 <div className="bg-white p-6 rounded-3xl shadow-xl mb-4">
                                     <h2 className="text-2xl font-bold text-teal-600">{secondProfile.Name}</h2>
