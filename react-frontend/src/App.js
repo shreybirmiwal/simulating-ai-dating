@@ -26,7 +26,9 @@ function App() {
 
     const handleSecondSpin = () => {
         if (firstProfile) {
-            const matches = JSON.parse(firstProfile.matches);
+            console.log("got here");
+            console.log(firstProfile.matches)
+            const matches = (firstProfile.matches);
             const randomMatchId = matches[Math.floor(Math.random() * matches.length)];
             const matchProfile = profiles.find(profile => profile.ID === randomMatchId);
             setSecondProfile(matchProfile);
@@ -36,17 +38,14 @@ function App() {
 
     const simulateConversation = () => {
         const convo = [
-            { sender: 'user1', text: 'Hey! 👋 Loved your profile!', delay: 500 },
-            { sender: 'user2', text: 'Thanks! 😊 Yours too! What are you up to?', delay: 1500 },
-            { sender: 'user1', text: 'Just looking for someone to explore the city with!', delay: 2500 },
-            { sender: 'user2', text: 'Perfect match then! 🌆 Favorite coffee spot?', delay: 3500 },
+            { sender: 'user1', text: 'Hey! 👋 Loved your profile!' },
+            { sender: 'user2', text: 'Thanks! 😊 Yours too! What are you up to?' },
+            { sender: 'user1', text: 'Just looking for someone to explore the city with!' },
+            { sender: 'user2', text: 'Perfect match then! 🌆 Favorite coffee spot?' },
         ];
 
-        convo.forEach((msg, index) => {
-            setTimeout(() => {
-                setMessages(prev => [...prev, { id: index, ...msg }]);
-            }, msg.delay);
-        });
+
+        setMessages(convo);
     };
 
     useEffect(() => {
