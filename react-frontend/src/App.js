@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { profiles } from './profiles';
+import OpenAI from 'openai';
 
 function App() {
     const [firstProfile, setFirstProfile] = useState(null);
@@ -36,20 +37,79 @@ function App() {
         }
     };
 
-    const simulateConversation = () => {
-        const convo = [
-            { sender: 'user1', text: 'Hey! 👋 Loved your profile!' },
-            { sender: 'user2', text: 'Thanks! 😊 Yours too! What are you up to?' },
-            { sender: 'user1', text: 'Just looking for someone to explore the city with!' },
-            { sender: 'user2', text: 'Perfect match then! 🌆 Favorite coffee spot?' },
-        ];
+    const client = new OpenAI({
+        baseURL: "https://api.targon.com/v1",
+        apiKey: process.env.REACT_APP_TARGON_KEY,
+        dangerouslyAllowBrowser: true
+    });
 
 
+
+    const simulateConversation = async () => {
+
+        const sample = ['Hey! 👋 Loved your profile!', 'Thanks! 😊 Yours too! What are you up to?', 'Just looking for someone to explore the city with!', 'Perfect match then! 🌆 Favorite coffee spot?']
+        var stringified = JSON.stringify(sample);
+
+        try {
+
+            console.log("starting stream")
+            console.log('firstProfile', firstProfile.ProfileText)
+            console.log('secondProfile', secondProfile.ProfileText)
+            console.log('stringified', stringified)
+
+
+            console.log("starting stream")
+            const stream = await client.chat.completions.create({
+                model: "deepseek-ai/DeepSeek-V3",
+                stream: true,
+                messages: [
+                    { role: "system", content: "You will be given 2 users dating profile. Your job is to come up with a hypothethical conversation between these 2 users, being realistic and utilizing a realtiic convo given what you know about them. You must return in STRICT JSON OUTPUT FORMAT, following the given format example, without giving any extra start or end tokens: " + { stringified } },
+                    { role: "user", content: "###### This is the Dating Doc Of User 1 ####### " + firstProfile.ProfileText },
+                    { role: "user", content: "###### This is the Dating Doc Of User 2 ####### " + secondProfile.ProfileText }
+                ],
+                temperature: 0.0,
+
+            });
+            console.log("parsing tokens")
+            var total = ""
+            for await (const chunk of stream) {
+                const content = chunk.choices[0]?.delta?.content || "";
+                total += content
+                // console.log(content)
+            }
+            console.log("Done gathering tokens")
+
+            console.log(total);
+
+            const convo = JSON.parse(total);
+
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
+
+        const convo = ['Hey! 👋 Loved your profile!', 'Thanks! 😊 Yours too! What are you up to?', 'Just looking for someone to explore the city with!', 'Perfect match then! 🌆 Favorite coffee spot?']
         setMessages(convo);
     };
 
     useEffect(() => {
-        if (showConvo) simulateConversation();
+        // Remove the async here and handle async logic properly
+        let isMounted = true;
+
+        const runSimulation = async () => {
+            if (showConvo) {
+                const convo = await simulateConversation();
+                if (isMounted) {
+                    setMessages(convo);
+                }
+            }
+        };
+
+        runSimulation();
+
+        return () => {
+            isMounted = false; // Cleanup to prevent stale state updates
+        };
     }, [showConvo]);
 
     return (
@@ -129,18 +189,18 @@ function App() {
                         {/* Chat Container */}
                         <div className="flex-1 bg-white rounded-2xl shadow-xl p-6 flex flex-col">
                             <div className="flex-1 space-y-4 overflow-y-auto mb-4">
-                                {messages.map((message) => (
+                                {messages.map((message, index) => (
                                     <div
-                                        key={message.id}
-                                        className={`flex ${message.sender === 'user1' ? 'justify-start' : 'justify-end'}`}
+                                        key={index}
+                                        className={`flex ${index % 2 === 0 ? 'justify-start' : 'justify-end'}`}
                                     >
                                         <div
-                                            className={`max-w-md p-4 rounded-3xl ${message.sender === 'user1'
+                                            className={`max-w-md p-4 rounded-3xl ${index % 2 === 0
                                                 ? 'bg-purple-100 text-purple-800'
                                                 : 'bg-green-100 text-green-800'
                                                 }`}
                                         >
-                                            {message.text}
+                                            {message}
                                         </div>
                                     </div>
                                 ))}
