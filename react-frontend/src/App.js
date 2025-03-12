@@ -63,7 +63,7 @@ function App() {
                 model: "deepseek-ai/DeepSeek-V3",
                 stream: true,
                 messages: [
-                    { role: "system", content: "You will be given 2 users dating profile. Your job is to come up with a hypothethical conversation between these 2 users, being realistic and utilizing a realtiic convo given what you know about them. You must return in STRICT JSON OUTPUT FORMAT, following the given format example, without giving any extra start or end tokens: " + { stringified } },
+                    { role: "system", content: "You will be given 2 users dating profile. Your job is to come up with a hypothethical conversation between these 2 users, being realistic and utilizing a realtiic convo given what you know about them. You must return in STRICT JSON OUTPUT FORMAT, following the given format (note teh back and forth array with no extra info) example, without giving any extra start or end tokens: " + { stringified } },
                     { role: "user", content: "###### This is the Dating Doc Of User 1 ####### " + firstProfile.ProfileText },
                     { role: "user", content: "###### This is the Dating Doc Of User 2 ####### " + secondProfile.ProfileText }
                 ],
